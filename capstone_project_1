@@ -1,0 +1,239 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# preparing dataset\n",
+    "1. load table from Wikipedia using pandas' read_html"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 91,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[    Postcode           Borough          Neighbourhood\n",
+      "0        M1A      Not assigned           Not assigned\n",
+      "1        M2A      Not assigned           Not assigned\n",
+      "2        M3A        North York              Parkwoods\n",
+      "3        M4A        North York       Victoria Village\n",
+      "4        M5A  Downtown Toronto           Harbourfront\n",
+      "..       ...               ...                    ...\n",
+      "282      M8Z         Etobicoke              Mimico NW\n",
+      "283      M8Z         Etobicoke     The Queensway West\n",
+      "284      M8Z         Etobicoke  Royal York South West\n",
+      "285      M8Z         Etobicoke         South of Bloor\n",
+      "286      M9Z      Not assigned           Not assigned\n",
+      "\n",
+      "[287 rows x 3 columns]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "import pandas as pd\n",
+    "from pandas.io.html import read_html\n",
+    "page = \"https://en.wikipedia.org/wiki/List_of_postal_codes_of_Canada:_M\"\n",
+    "wikitable = read_html(page, attrs={\"class\": \"wikitable\"})\n",
+    "print(wikitable)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "2. remove all rows that contain \"Not assigned\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "pandas.core.frame.DataFrame"
+      ]
+     },
+     "execution_count": 17,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "type(wikitable[0])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 78,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "2            North York\n",
+      "3            North York\n",
+      "4      Downtown Toronto\n",
+      "5            North York\n",
+      "6            North York\n",
+      "             ...       \n",
+      "281           Etobicoke\n",
+      "282           Etobicoke\n",
+      "283           Etobicoke\n",
+      "284           Etobicoke\n",
+      "285           Etobicoke\n",
+      "Name: Borough, Length: 210, dtype: object\n"
+     ]
+    }
+   ],
+   "source": [
+    "df2 = df[~df[\"Borough\"].str.contains(\"Not assigned\")]\n",
+    "print(df2[\"Borough\"])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "3. group the data"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 88,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "                                                          Neighbourhood\n",
+      "Postcode Borough                                                       \n",
+      "M1B      Scarborough                                      Rouge,Malvern\n",
+      "M1C      Scarborough               Highland Creek,Rouge Hill,Port Union\n",
+      "M1E      Scarborough                    Guildwood,Morningside,West Hill\n",
+      "M1G      Scarborough                                             Woburn\n",
+      "M1H      Scarborough                                          Cedarbrae\n",
+      "...                                                                 ...\n",
+      "M9N      York                                                    Weston\n",
+      "M9P      Etobicoke                                            Westmount\n",
+      "M9R      Etobicoke    Kingsview Village,Martin Grove Gardens,Richvie...\n",
+      "M9V      Etobicoke    Albion Gardens,Beaumond Heights,Humbergate,Jam...\n",
+      "M9W      Etobicoke                                            Northwest\n",
+      "\n",
+      "[103 rows x 1 columns]\n"
+     ]
+    }
+   ],
+   "source": [
+    "grouped = df2.groupby(['Postcode', 'Borough'])['Neighbourhood'].apply(lambda Neighbourhood: ','.join(Neighbourhood))\n",
+    "df3 = pd.DataFrame(grouped)\n",
+    "print(df3)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 90,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(103, 1)"
+      ]
+     },
+     "execution_count": 90,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df3.shape"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python",
+   "language": "python",
+   "name": "conda-env-python-py"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.6.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
